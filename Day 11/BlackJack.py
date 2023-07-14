@@ -3,97 +3,132 @@ import random
 import time
 
 
-cards_available = [11,2,3,4,5,6,7,8,9,10,10,10,10]
-
-def thinking(timeTotalt):
-    while timeTotalt > 0:
-        time.sleep(1)
-        print(f"Calculating! wait for {timeTotalt}.")
-        timeTotalt-=1
-print("Hello and welcome to BlackJack\\21")
-is_player_playering = input("Do you wanna play the game of BlackJack? 'Y' 'N' \n").lower()
+def main():    
 
 
+    cards_available = [11,2,3,4,5,6,7,8,9,10,10,10,10]
 
 
+    def replace(list_,item,withWhat):
+        index = list_.index(item)
+        list_.pop(index)
+        list_.insert(index,withWhat)
 
-def choose_card(list):
-    value = random.choice(list)
-    return value
-
-def calculate_value(first,second,third):
-    return first+second+third
-
-player_first = choose_card(cards_available)
-player_second = choose_card(cards_available)
-player_third = 0
-player_overall = calculate_value(player_first,player_second,player_third)
-player_list = [player_first,player_second]
-
-computer_first = choose_card(cards_available)
-computer_second = choose_card(cards_available)
-computer_third = 0
-computer_overall = computer_first+computer_second
-other_computer_overall = computer_first+computer_second
-computer_list_hidden = [computer_first,"???"]
-computer_list_shown = [computer_first,computer_second]
-
-def show_value():
-    print(f"Player values are {player_list}")
-    print(f"Computer values are {computer_list_shown}.")
-
-def end_the_game():
-    if player_overall > computer_overall:
-        show_value()
-        print("Player Wins!")
-    else:
-        show_value()
-        print("Computer wins!")
-
-print(player_overall)
-print(computer_overall)
-
-def computer_needs_more():
-    if other_computer_overall < 17:
-        computer_third = choose_card(cards_available)
-        computer_list_shown.append(computer_third)
-        computer_overall = calculate_value(computer_first,computer_second,computer_third)
-        if computer_overall > 21:
-            print("Computer loses!")
-            print("PLayer wins!")
-        else:
-            end_the_game()
-
-
-def player_wants_more():
-    add_more = input("Do you wanna take another card? 'Y' 'N' \n").lower()
-    if add_more == "y":
-        player_third = choose_card(cards_available)
-        player_overall = calculate_value(player_first,player_second,player_third)
-        player_list.append(player_third)
-        if player_overall > 21:
-            show_value()
-            print("Computer wins!")
-            print("You lose!")
-        else:
-            computer_needs_more()
-            end_the_game()
-    else:
-        computer_needs_more()
-        end_the_game()    
-        
-
-def main():
-    thinking(3)
-    print(f"Player values are {player_list}")
-    print(f"Computer values are {computer_list_hidden}.")
-    player_wants_more()
-
-
-
-main()
-        
-   
-   
     
+    # def random_card(x):
+    #     return random.choice(x)
+    def random_card(x):
+        random_number = random.choice(x)
+        random_number_index = x.index(random_number)
+        x.pop(random_number_index)
+        
+        return random_number
+    
+    def calculate_cards(cards_deck):
+    
+        if sum(cards_deck) > 21 and 11 in cards_deck:
+            replace(cards_deck,11,1)
+    
+        return sum(cards_deck)
 
+    game_stop = True
+
+    player_cards = [random_card(cards_available),random_card(cards_available)]
+    computer_cards = [random_card(cards_available),random_card(cards_available)]
+
+
+    def game_over():
+
+        game_stop = False    
+        player_total = calculate_cards(player_cards)
+        computer_total = calculate_cards(computer_cards)
+        if player_total > computer_total:
+            print("Player wins!")
+            print(f"Your cards are {player_cards}.")
+            print(f"Computer cards are {computer_cards}.")
+        elif player_total == computer_total:
+            print("Draw!")    
+            print(f"Your cards are {player_cards}.")
+            print(f"Computer cards are {computer_cards}.")
+
+        else:
+            print("Computer wins!")
+            print(f"Your cards are {player_cards}.")
+            print(f"Computer cards are {computer_cards}.")
+
+
+
+    
+    while game_stop:
+        if sum(player_cards) == 21 and len(player_cards) == 2:
+            print("Player has Black Jack!")
+            print(f"Your cards are {player_cards}.")
+            print(f"Computer cards are {computer_cards}.")
+            break
+        if sum(computer_cards) == 21 and len(computer_cards) == 2:
+            print("Computer has Black Jack!")
+            print(f"Your cards are {player_cards}.")
+            print(f"Computer cards are {computer_cards}.")
+            break
+            
+        another =input(f"Your cards are {player_cards} and the computers first hand is {computer_cards[0]}.\nDo you wanna take another card?  'Y' or 'N' \n")
+        player_total = calculate_cards(player_cards)
+        computer_total = calculate_cards(computer_cards)
+
+        if another == "y":
+            player_cards.append(random_card(cards_available))
+            player_total = calculate_cards(player_cards)
+            if player_total > 21:
+                print("Player Lose!")
+                print(f"Your cards are {player_cards}.")
+                print(f"Computer cards are {computer_cards}.")
+                game_stop = False
+                break
+            
+            
+            if sum(computer_cards) <17 :
+                computer_cards.append(random_card(cards_available))
+                computer_total = calculate_cards(computer_cards)
+                if computer_total > 21:
+                    print("Computer lose!")
+                    print(f"Your cards are {player_cards}.")
+                    print(f"Computer cards are {computer_cards}.")
+                    game_stop = False
+                    break
+                
+        else:
+            if sum(computer_cards) <17 :
+                computer_cards.append(random_card(cards_available))
+                computer_total = calculate_cards(computer_cards)
+                if computer_total > 21:
+                    print("Computer lose!")
+                    print(f"Your cards are {player_cards}.")
+                    print(f"Computer cards are {computer_cards}.")
+                    game_stop = False
+                    break
+                
+            game_stop = False
+            game_over()
+
+is_playing = True
+
+def dividing(time_count):
+    hi = 1
+    while time_count > 0:
+        time.sleep(0.2)
+        print("%-10s" % "." * hi )
+        time_count -=1
+        hi+=1
+         
+
+while is_playing:
+    game_start = input("\n\nDo you want to play the game of Black Jack? 'Y' or 'N' \n").lower()
+    if game_start == "y":
+        system("cls")
+        dividing(6)
+        main()
+    elif game_start == "n":
+        print("OK\nWhy so serious?")
+        is_playing = False
+    else:
+        print("Yo no comprendo amigo!")
