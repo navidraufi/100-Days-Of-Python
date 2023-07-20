@@ -1,6 +1,6 @@
 from turtle import Turtle, Screen
 from Shapes import Shapes
-
+import random
 screen = Screen()
 
 tom = Turtle()
@@ -9,10 +9,13 @@ tom.shape("turtle")
 colors = ["red", "blue", "cyan", "brown", "DarkOrange", "azure", "bisque", "DarkOrchid", "DarkGrey", "DeepPink",
           "DarkViolet", "green"]
 
-sides = 3
+shapes = ["triangle", "circle", "square"]
 
+sides = 3
+screen.bgcolor("black")
 
 def shape(sidez, color):
+    tom.shape(random.choice(shapes))
     for _ in range(sidez):
         angle = 360 / sidez
         tom.forward(100)
