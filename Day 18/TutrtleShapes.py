@@ -12,7 +12,7 @@ colors = ["red", "blue", "cyan", "brown", "DarkOrange", "azure", "bisque", "Dark
 shapes = ["triangle", "circle", "square"]
 
 sides = 3
-screen.bgcolor("black")
+screen.bgcolor(random.choice(colors)")
 
 def shape(sidez, color):
     tom.shape(random.choice(shapes))
